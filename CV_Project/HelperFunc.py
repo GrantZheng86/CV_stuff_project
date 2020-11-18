@@ -73,7 +73,7 @@ def loadCameraCalibration():
 
     return mtx, dist
 
-def findMatchingPoints(im1, im2):
+def findMatchingPoints(im1, im2, show_image = False):
     detector = cv2.ORB_create(nfeatures=2000, nlevels=8, firstLevel=0, patchSize=31, edgeThreshold=31)
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
     
@@ -98,7 +98,11 @@ def findMatchingPoints(im1, im2):
     bgr_matches = cv2.drawMatches(img1=im1, keypoints1=im1_key_pts,
                                   img2=im2, keypoints2=im2_key_pts,
                                   matches1to2=matches, matchesMask=None, outImg=None)
-    cv2.namedWindow("All matches", cv2.WINDOW_NORMAL) 
-    cv2.imshow("All matches", bgr_matches)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    
+    if show_image:
+        cv2.namedWindow("All matches", cv2.WINDOW_NORMAL) 
+        cv2.imshow("All matches", bgr_matches)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        
+    return im1Pts, im2Pts
