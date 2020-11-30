@@ -8,7 +8,7 @@ from pip._vendor.chardet import detect
 
 CALIBRATION_PATH = "Images\\Camera Calibration\\"
 STEREO_PATH = "Images\\Stereo Images\\"
-
+clickLocations = []
 
 def calibrateCamera():
     """
@@ -106,3 +106,25 @@ def findMatchingPoints(im1, im2, show_image = False):
         cv2.destroyAllWindows()
         
     return im1Pts, im2Pts
+
+def choosePointsOnImage(frame):
+    """
+    Prompt user to click the points on the image
+    """
+    
+   
+    cv2.imshow("Choose Point", frame);
+    cv2.setMouseCallback("Choose Point", getXY)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    global clickLocations
+    return clickLocations
+    
+def getXY(event, x, y, flags, param):
+    
+    """
+    MouseClickListener
+    """
+    global clickLocations 
+    if event == cv2.EVENT_LBUTTONDOWN:
+        clickLocations.append([x, y])
