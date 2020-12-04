@@ -68,16 +68,28 @@ if __name__ == '__main__':
         curr = curr / curr[3]
         points.append(curr)
 
+    final_points = []
     for each_point in points:
         x = each_point[0]
         y = each_point[1]
         z = each_point[2]
-        ax.scatter(x, y, z, marker = '.')
         corners = [x, y, z] * scale
         print(corners)
-        
-        
+        final_points.append(corners)
+
+    distx = 0
+    disty = 0
+    distz = 0
+    for corner in final_points:
+        distx += corner[0]
+        disty += corner[1]
+        distz += corner[2]
+    distx = distx/4000
+    disty = disty/4000
+    distz = distz/4000
+    final_vector = [distx,disty,distz]
     plt.show()
+    print(f"The vector from the camera to the selected object is:\n{final_vector} in meters")
          
         
         
