@@ -33,24 +33,25 @@ if __name__ == '__main__':
     E, _ = cv2.findEssentialMat(im1_pts, im2_pts, cam_matrix)
     _, R, t, _ = cv2.recoverPose(E, im1_pts, im2_pts)
     H = np.hstack((R, t))
-    print(R)
-    print(t)
+    print('rotation:\n',R)
+    print('translation:\n',t)
 
-    print(H)
+    print('homographys:\n',H)
     #
     # calculating the scale to the real world. The translation of the camera is known
     # to be 6 inches, 152.4mm
     scale = 152.4 / np.abs(t[0])
-    print(scale)
+    print('scale: ',scale)
     p_reference = np.matmul(cam_matrix, np.concatenate((np.eye(3), np.zeros((3, 1))), axis=1))
     p_second = np.matmul(cam_matrix, H)
     # make sure that p_second(3,3) is >= 0 since all the points are infront of both
     # camera positions
     print(p_second)
 
-    # use triangulation
+    # use triangulation from user indicated points
     im1 = cv2.resize(im1, (0, 0), fx=0.2, fy=0.2)
     im2 = cv2.resize(im2, (0, 0), fx=0.2, fy=0.2)
+    # select points in a clockwise fashion beginning at the upper left
     clickedPoints = HelperFunc.choosePointsOnImage(im1)
     clickedPoints = HelperFunc.choosePointsOnImage(im2)
     clickedPoints = np.array(clickedPoints)
@@ -70,7 +71,7 @@ if __name__ == '__main__':
         curr = curr / curr[3]
         points.append(curr)
 
-    print(f"The vectors from the camera to the selected keypoints are (milimeters):  ")
+    print(f"The vectors from the camera to the selected keypoints (in milimeters) are:  ")
     vectors = []
     for each_point in points:
         x = each_point[0]
